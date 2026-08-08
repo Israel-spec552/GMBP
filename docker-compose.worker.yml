@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  worker:
+    build:
+      context: .
+      dockerfile: infra/worker.Dockerfile
+    volumes:
+      - ./backend:/var/www
+      - ./backend/vendor:/var/www/vendor
+      - ./backend/storage:/var/www/storage
+    depends_on:
+      - db
+      - redis
+      - clamav
+    environment:
+      - APP_ENV=local
+      - QUEUE_CONNECTION=redis
+    restart: unless-stopped
