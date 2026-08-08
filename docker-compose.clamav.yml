@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  clamav:
+    image: mkodockx/docker-clamav:alpine
+    container_name: clamav
+    restart: unless-stopped
+    ports:
+      - "3310:3310"
+    volumes:
+      - clamav-db:/var/lib/clamav
+
+  # Example: a lightweight supervisor service to manage workers in dev (optional)
+  worker-supervisor:
+    image: ubuntu:24.04
+    container_name: laravel-supervisor
+    restart: unless-stopped
+    volumes:
+      - ./backend:/var/www
+    working_dir: /var/www
+    command: ["sleep", "infinity"]
+
+volumes:
+  clamav-db:
